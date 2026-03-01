@@ -1,0 +1,82 @@
+CREATE TABLE `buddy_posts` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`trailId` int,
+	`title` varchar(200) NOT NULL,
+	`content` text NOT NULL,
+	`departureDate` varchar(100) NOT NULL,
+	`departureCity` varchar(100),
+	`currentCount` int NOT NULL DEFAULT 1,
+	`targetCount` int NOT NULL,
+	`budget` varchar(100),
+	`requirements` text,
+	`contactInfo` varchar(200),
+	`status` enum('open','full','closed') NOT NULL DEFAULT 'open',
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `buddy_posts_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `reviews` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`trailId` int NOT NULL,
+	`userId` int NOT NULL,
+	`rating` int NOT NULL,
+	`title` varchar(200),
+	`content` text NOT NULL,
+	`hikingDate` varchar(50),
+	`groupType` enum('solo','couple','friends','family','group'),
+	`helpfulCount` int DEFAULT 0,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `reviews_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `tour_groups` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`trailId` int NOT NULL,
+	`name` varchar(200) NOT NULL,
+	`operator` varchar(200) NOT NULL,
+	`price` int,
+	`duration` varchar(100),
+	`departureCity` varchar(100),
+	`nextDeparture` varchar(100),
+	`maxGroupSize` int,
+	`includes` json,
+	`bookingUrl` text,
+	`description` text,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `tour_groups_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `trails` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`name` varchar(200) NOT NULL,
+	`slug` varchar(200) NOT NULL,
+	`difficulty` enum('beginner','intermediate','advanced') NOT NULL,
+	`region` varchar(100) NOT NULL,
+	`province` varchar(50),
+	`duration` varchar(100) NOT NULL,
+	`distance` varchar(50),
+	`elevation` varchar(100),
+	`bestSeason` varchar(200) NOT NULL,
+	`coverImage` text,
+	`summary` text NOT NULL,
+	`highlights` json NOT NULL,
+	`equipment` json NOT NULL,
+	`transportation` text NOT NULL,
+	`accommodation` text NOT NULL,
+	`costMin` int,
+	`costMax` int,
+	`pros` json NOT NULL,
+	`cons` json NOT NULL,
+	`culturalBackground` text,
+	`tips` text,
+	`avgRating` float DEFAULT 0,
+	`reviewCount` int DEFAULT 0,
+	`featured` boolean DEFAULT false,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `trails_id` PRIMARY KEY(`id`),
+	CONSTRAINT `trails_slug_unique` UNIQUE(`slug`)
+);
